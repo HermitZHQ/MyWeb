@@ -7,6 +7,10 @@ $(document).ready(function () {
     $("button#toReg").click(function () {
         self.location.href = "register.html";
     });
+
+    $("button#toTop").click(function(){   
+        self.location.href = "#loginArea";
+    });
 })
 
 function ParseParam() {

@@ -1,3 +1,9 @@
+#toTop{
+    position: fixed;
+    bottom: 40px;
+    right: 0px;
+}
+
 #loginArea{
     background-color: #aaaaaa;
     width: 100%;
