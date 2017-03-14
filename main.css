@@ -27,7 +27,7 @@
     background-color: #888888;
     text-align: center;
     width: 15%;
-    height: 90%;
+    height: auto;
 }
 
 #navArea ul{
@@ -43,11 +43,27 @@
     border:2px solid #bbbbbb;
 }
 
+#adArea{
+    background-color: #34ef64;
+    float: right;
+    width: 15%;
+    height: auto;
+}
+
+#adArea ul{
+    list-style: none;
+}
+
+#adArea ul li img{
+    width: 90%;
+    height: auto;
+}
+
 #contentArea{
     background-color: #555555;
-    float: right;
-    width: 85%;
-    height: 90%;
+    float: left;
+    width: 70%;
+    height: auto;
     text-align: center;
 }
 
@@ -59,5 +75,10 @@
     float: left;
     background-color: black;
     width: 100%;
-    height: 10%;
+}
+
+#bottomArea ul{
+    list-style: none;
+    text-align: center;
+    color: red;
 }
