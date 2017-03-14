@@ -1,0 +1,16 @@
+{
+  "name": "tstest",
+  "version": "1.0.0",
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es6",
+        "noImplicitAny": false,
+        "sourceMap": true,
+        "allowJs": true,
+        "outDir": "./TypeScript/"
+    }
+    ,
+    "exclude": [
+        "node_modules"
+    ]
+}
