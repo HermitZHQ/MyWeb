@@ -14,9 +14,50 @@
 #loginArea ul{
     color: green;
     text-align: right;
-    margin-top: -45px;
+    margin-top: -50px;
+    margin-right: 10px;
 }
 
 #loginArea ul li{
     list-style: none;
+}
+
+#navArea{
+    float: left;
+    background-color: #888888;
+    text-align: center;
+    width: 15%;
+    height: 90%;
+}
+
+#navArea ul{
+    list-style: none;
+    margin-left: -40px;
+}
+
+#navArea ul li{
+    margin-bottom: 10px;
+}
+
+#navArea ul li a{
+    border:2px solid #bbbbbb;
+}
+
+#contentArea{
+    background-color: #555555;
+    float: right;
+    width: 85%;
+    height: 90%;
+    text-align: center;
+}
+
+#contentArea p{
+    text-anchor: start;
+}
+
+#bottomArea{
+    float: left;
+    background-color: black;
+    width: 100%;
+    height: 10%;
 }
