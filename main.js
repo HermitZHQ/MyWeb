@@ -33,11 +33,14 @@ function init() {
     };
 
     var onError = function (xhr) {
+        alert("Load model failed");
     };
+
+    THREE.ImageUtils.crossOrigin = "anonymous";
 
     var loader = new THREE.ImageLoader(manager);
 
-    loader.load('resource/texture/UV_Grid_Sm.jpg', function (image) {
+    loader.load('resource/obj/male02/male-02-1noCulling.jpg', function (image) {
         texture.image = image;
         texture.needsUpdate = true;
     });
@@ -45,7 +48,7 @@ function init() {
     // model
     var loader = new THREE.OBJLoader(manager);
 
-    loader.load('file:///resource/obj/male02.obj', function (object) {
+    loader.load('resource/obj/male02/male02.obj', function (object) {
         object.traverse(function (child) {
             if (child instanceof THREE.Mesh) {
                 child.material.map = texture;
