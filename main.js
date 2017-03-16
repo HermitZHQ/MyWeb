@@ -60,7 +60,7 @@ function init() {
     contentArea = document.getElementById("contentArea");
 
     camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 2000);
-    camera.position.z = 250;
+    camera.position.z = 80;
 
     // scene
     scene = new THREE.Scene();
@@ -92,21 +92,22 @@ function init() {
 
     var loader = new THREE.ImageLoader(manager);
 
-    loader.load('resource/obj/male02/male-02-1noCulling.jpg', function (image) {
+    loader.load('resource/obj/head/tou.jpg', function (image) {
         texture.image = image;
         texture.needsUpdate = true;
     });
 
     // model
     var loader = new THREE.OBJLoader(manager);
-
-    loader.load('resource/obj/male02/male02.obj', function (object) {
+    loader.load('resource/obj/head/001.obj', function (object) {
         object.traverse(function (child) {
             if (child instanceof THREE.Mesh) {
-                child.material.map = texture;
+                // child.material.map = texture;
+                //alert("resource/obj/head/"+child.name+".jpg");
+                child.material.map = THREE.ImageUtils.loadTexture("resource/obj/head/"+child.name+".jpg");
             }
         });
-        object.position.y = - 95;
+        object.position.y = 10;
         mod1 = object;
         // object.rotateY(1.0);
         scene.add(object);
