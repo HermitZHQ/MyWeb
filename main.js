@@ -1,23 +1,26 @@
 
 var container;
-var camera, scene, renderer;
+var camera, scene, renderer, mod1;
 var mouseX = 0, mouseY = 0;
 var windowHalfX = window.innerWidth / 2;
 var windowHalfY = window.innerHeight / 2;
 
 function init() {
-    container = document.createElement('div');
-    document.body.appendChild(container);
+    // container = document.createElement('div');
+    // document.body.appendChild(container);
+    container = document.getElementById("contentArea");
+
     camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 2000);
     camera.position.z = 250;
 
     // scene
     scene = new THREE.Scene();
-    var ambient = new THREE.AmbientLight(0x101030);
+    var ambient = new THREE.AmbientLight(0xdddddd);
     scene.add(ambient);
     var directionalLight = new THREE.DirectionalLight(0xffeedd);
     directionalLight.position.set(0, 0, 1);
     scene.add(directionalLight);
+    
     // texture
     var manager = new THREE.LoadingManager();
     manager.onProgress = function (item, loaded, total) {
@@ -33,7 +36,7 @@ function init() {
     };
 
     var onError = function (xhr) {
-        alert("Load model failed");
+        alert("Load model failed"); 
     };
 
     THREE.ImageUtils.crossOrigin = "anonymous";
@@ -55,14 +58,19 @@ function init() {
             }
         });
         object.position.y = - 95;
+        mod1 = object;
+        // object.rotateY(1.0);
         scene.add(object);
     }, onProgress, onError);
 
     //
     renderer = new THREE.WebGLRenderer();
     renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    //renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(800, 600);
+    renderer.setClearColor(0xffffff,1);
     container.appendChild(renderer.domElement);
+    // container.setAttribute("background-color", "#eeeeee");
     document.addEventListener('mousemove', onDocumentMouseMove, false);
 
     //
@@ -78,8 +86,8 @@ function onWindowResize() {
 }
 
 function onDocumentMouseMove(event) {
-    mouseX = (event.clientX - windowHalfX) / 2;
-    mouseY = (event.clientY - windowHalfY) / 2;
+    // mouseX = (event.clientX - windowHalfX) / 2;
+    // mouseY = (event.clientY - windowHalfY) / 2;
 }
 
 //
@@ -89,6 +97,7 @@ function animate() {
 }
 
 function render() {
+    // mod1.rotateY(0.01);
     camera.position.x += (mouseX - camera.position.x) * .05;
     camera.position.y += (- mouseY - camera.position.y) * .05;
     camera.lookAt(scene.position);
