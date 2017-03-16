@@ -1,9 +1,26 @@
-
 var container;
-var camera, scene, renderer, mod1;
+var camera, scene, renderer;
 var mouseX = 0, mouseY = 0;
 var windowHalfX = window.innerWidth / 2;
 var windowHalfY = window.innerHeight / 2;
+var mod1 = new THREE.Object3D();
+
+$(document).ready(function () {
+    //alert("main page ready");
+    ParseParam();
+    //LoadObjTest();
+
+    init();
+    animate();
+
+    $("button#toReg").click(function () {
+        self.location.href = "register.html";
+    });
+
+    $("button#toTop").click(function () {
+        self.location.href = "#loginArea";
+    });
+})
 
 function init() {
     // container = document.createElement('div');
@@ -67,9 +84,11 @@ function init() {
     renderer = new THREE.WebGLRenderer();
     renderer.setPixelRatio(window.devicePixelRatio);
     //renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setSize(800, 600);
-    renderer.setClearColor(0xffffff,1);
-    container.appendChild(renderer.domElement);
+    //renderer.setSize(800, 600);
+    renderer.setSize(container.clientWidth, container.clientWidth/1.7777);
+    renderer.setClearColor(0xffffff,0);
+    //container.appendChild(renderer.domElement);
+    $("#contentArea").prepend(renderer.domElement);
     // container.setAttribute("background-color", "#eeeeee");
     document.addEventListener('mousemove', onDocumentMouseMove, false);
 
@@ -82,7 +101,8 @@ function onWindowResize() {
     windowHalfY = window.innerHeight / 2;
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    // renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(container.clientWidth, container.clientWidth/1.7777);
 }
 
 function onDocumentMouseMove(event) {
@@ -97,29 +117,12 @@ function animate() {
 }
 
 function render() {
-    // mod1.rotateY(0.01);
+    mod1.rotateY(0.01);
     camera.position.x += (mouseX - camera.position.x) * .05;
     camera.position.y += (- mouseY - camera.position.y) * .05;
     camera.lookAt(scene.position);
     renderer.render(scene, camera);
 }
-
-$(document).ready(function () {
-    //alert("main page ready");
-    ParseParam();
-    //LoadObjTest();
-
-    init();
-    animate();
-
-    $("button#toReg").click(function () {
-        self.location.href = "register.html";
-    });
-
-    $("button#toTop").click(function () {
-        self.location.href = "#loginArea";
-    });
-})
 
 function ParseParam() {
     var strParams = location.href.split("?")[1];

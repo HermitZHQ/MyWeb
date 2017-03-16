@@ -12,9 +12,16 @@
     display: inline-block;
 }
 
+#loginArea h3{
+    color: #22ff11;
+    font-size: 8;
+    margin-top: -3px;
+}
+
 #loginArea p{
     color: #0000ff;
     font-size: 18;
+    margin-top: 3px;
 }
 
 #loginArea ul{
