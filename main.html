@@ -6,8 +6,11 @@
     <script src="3JS/src/loaders/ImageLoader.js"></script>
     <script src="3JS/src/OBJLoader.js"></script>
     <script src="jquery/jquery-3.1.1.min.js"></script>
+    <script src="nivo-slider/jquery.nivo.slider.js"></script>
     <script src="main.js"></script>
     <link rel="stylesheet" type="text/css" href="main.css">
+    <link rel="stylesheet" href="nivo-slider/themes/default/default.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="nivo-slider/nivo-slider.css" type="text/css" media="screen" />
 </head>
 
 <body>
@@ -29,6 +32,13 @@
                 <a href="">Login</a>
             </li>
         </ul>
+    </div>
+
+    <div id="slider" class="nivoSlider">
+        <img src="resource/picture/1.jpg" data-thumb="resource/picture/1.jpg" alt="" />
+        <img src="resource/picture/2.jpg" data-thumb="resource/picture/2.jpg" alt="" title="This is an example of a caption" />
+        <img src="resource/picture/3.jpg" data-thumb="resource/picture/3.jpg" alt="" data-transition="slideInLeft" />
+        <img src="resource/picture/4.jpg" data-thumb="resource/picture/4.jpg" alt="" title="#htmlcaption" />
     </div>
 
     <div id="navArea">
@@ -63,6 +73,7 @@
     </div>
 
     <div id="contentArea">
+
         <h1>Git常用命令1</h1>
         <p>
             git help [command] # 显示command的help

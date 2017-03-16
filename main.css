@@ -80,6 +80,11 @@
     text-align: center;
 }
 
+#slider{
+    width: auto;
+    height: auto;
+}
+
 #contentArea p{
     text-anchor: start;
 }
