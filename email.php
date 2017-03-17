@@ -14,7 +14,7 @@ $body = "Hi,\n\nHow are you?";
 $host = "smtp.163.com";
 $port = "25";
 $username = "cdzhanghongquan@163.com";
-$password = "Zhq&Xi000136";
+$password = "Test123";
 
 //邮件头
 $headers = array ('From' => $from,  
