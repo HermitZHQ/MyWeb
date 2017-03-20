@@ -1,7 +1,13 @@
 {
     "version": "0.2.0",
     "configurations": [
-
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Launch Chrome with crawler.html",
+            "url": "http://127.0.0.1:63342/crawler/crawler.html",
+            "webRoot": "${workspaceRoot}"
+        },
         {
             "type": "node",
             "request": "launch",
@@ -11,7 +17,7 @@
         {
             "type": "chrome",
             "request": "launch",
-            "name": "Launch Chrome against localhost",
+            "name": "Launch Chrome with main.html",
             "url": "http://localhost:63342/main.html",
             "webRoot": "${workspaceRoot}"
         },
