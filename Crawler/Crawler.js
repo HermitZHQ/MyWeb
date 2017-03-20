@@ -4,7 +4,7 @@ $(document).ready(function () {
         TestBtn();
     });
 
-    document.domain = 'qq.com';
+    // document.domain = 'qq.com';
 });
 
 function TestBtn() {
