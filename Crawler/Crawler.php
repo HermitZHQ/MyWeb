@@ -1,34 +1,72 @@
 <?php
-error_reporting(0); 
+error_reporting(0);
 header("Access-Control-Allow-Origin:*");
 
-// //http://gu.qq.com/sz000568
-// $url='http://gu.qq.com/sz000568';//此处写抓取的网页的网址，我随便写的 
-// $html=file_get_contents($url);
-// // echo "<!--'$html'-->";
-
-// $fileName = "testHtml.txt";
-// $f = fopen($fileName, 'w');
-// fwrite( $f, $html );
-// fclose($f);
-
-// $dom=new DOMDocument();
-// $dom->loadHTML($html);
+$response = "";
+$idArr = $_POST["ids"];
+$count = count($idArr);
+if ($count == 0) {
+    $response = "null ids...";
+    echo $response;
+    return;
+}
 
 $ch = curl_init();
 //设置选项，包括URL
-//http://gu.qq.com/i/
-//http://stockapp.finance.qq.com/mstats/
-//http://stockpage.10jqka.com.cn/600694/
-//https://www.baidu.com/s?wd=600694&rsv_spt=1&rsv_iqid=0xa06820e3000666cf&issp=1&f=8&rsv_bp=1&rsv_idx=2&ie=utf-8&rqlang=cn&tn=baiduhome_pg&rsv_enter=1&oq=%25E5%25A4%25A7%25E6%2599%25BA%25E6%2585%25A7&rsv_t=c4d61%2Fc1IBoTni49E7BlT2sI7zGHc5jyMEJ4CCCNdBX1b5TdPVPXhghJ2jW7WqqSw8%2BB&inputT=1353&rsv_pq=a5db52a8000006bf&rsv_sug3=51&rsv_sug1=35&rsv_sug7=100&rsv_sug2=0&rsv_sug4=1353
-curl_setopt($ch, CURLOPT_URL, "http://www.baidu.com/s?wd=600694");
+//http://qt.gtimg.cn/q=sh600694
+//http://qt.gtimg.cn/q=s_sh600694,s_sh601988,s_sz000701,s_sh600012,s_sh600028,s_sh600694,s_sh601717,s_sz000002
+$queryUrl = "http://qt.gtimg.cn/q=";
+if ($count > 1) {
+    for ($i = 0; $i < $count; ++$i) {
+        $queryUrl = $queryUrl."s_sh".$idArr[$i].",";
+    }
+} else {
+    $queryUrl = $queryUrl."s_sh".$idArr.",";
+}
+
+curl_setopt($ch, CURLOPT_URL, $queryUrl);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 curl_setopt($ch, CURLOPT_HEADER, 0);
+
 //执行并获取HTML文档内容
 $output = curl_exec($ch);
+//打印获得的数据
+// print_r($output);
+
 //释放curl句柄
 curl_close($ch);
-//打印获得的数据
-print_r($output);
+
+$jsonArr = array();
+
+//handle the data we got
+$infoArr = explode(";", $output);
+$count = count($infoArr);
+if ($count > 0) {
+    for ($i = 0; $i < $count; ++$i) {
+        $infoArr[$i] = mb_convert_encoding($infoArr[$i], "UTF-8", "GB2312");
+        $dataArr = explode("~", $infoArr[$i]);
+        if (count($dataArr) > 3) {
+            //index:1-name 3-latest value
+            // $response = $response.$dataArr[1].":".$dataArr[3]." ";
+
+            $jsonArr['name'] = $dataArr[1];
+            $jsonArr['id'] = $dataArr[2];
+            $jsonArr['value'] = $dataArr[3];
+
+            $response = json_encode($jsonArr);
+            echo $response;
+            return;
+        } else {
+            $response = $infoArr[$i];
+            echo $response;
+            return;
+        }
+    }
+}
+
+// $response = $queryUrl;
+$response = "empty...";
+// $response = mb_convert_encoding($response, "UTF-8", "GB2312");
+echo $response;
 
 ?>

@@ -1,0 +1,21 @@
+.mixArea{
+    background-color: #666666;
+    display: block;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: auto;
+}
+
+.listArea{
+    width: auto;
+    height: auto;
+    background-color: #999999;
+    margin-top: 30px;
+    /*display: block;*/
+}
+
+.listArea ul{
+    list-style: none;
+}

@@ -4,9 +4,10 @@
         {
             "type": "chrome",
             "request": "launch",
+            "sourceMaps": true,
             "name": "Launch Chrome with crawler.html",
             "url": "http://127.0.0.1:63342/crawler/crawler.html",
-            "webRoot": "${workspaceRoot}"
+            "webRoot": "${workspaceRoot}/Crawler"
         },
         {
             "type": "node",

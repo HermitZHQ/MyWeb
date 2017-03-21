@@ -5,7 +5,7 @@
 //get param first
 function ParseParam() {
     var vs = self.location.href.split("?")[1];
-    if ( null == vs )
+    if ( null === vs )
         return;
 
     var vArr = vs.split(",");
@@ -40,7 +40,7 @@ $(document).ready(function () {
             );
         }
 
-    })
+    });
 });
 
 function ClearRegisterTips() {
@@ -95,11 +95,11 @@ function CheckRegisterInfo() {
 function ShowRegisterResult(json) {
     ClearRegisterTips();
 
-    if (json.nameRepeat != 0) {
+    if (json.nameRepeat !== 0) {
         $("#accountTip").html("name existed");
     }
 
-    if (json.emailRepeat != 0) {
+    if (json.emailRepeat !== 0) {
         $("#emailTip").html("email existed");
     }
 
