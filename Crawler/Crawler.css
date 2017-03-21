@@ -19,3 +19,15 @@
 .listArea ul{
     list-style: none;
 }
+
+.listArea .preP{
+    width: auto;
+    padding-right: 3px;
+    display: inline-block;
+}
+
+.listArea .sufP{
+    width: 8%;
+    /*padding-right: 15px;*/
+    display: inline-block;
+}

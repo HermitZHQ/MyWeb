@@ -1,7 +1,9 @@
 
-var g_id = 600000;
+var g_id;
 
 $(document).ready(function () {
+
+    var timerHandle;
 
     $("#showInfo").click(function () {
         ShowBtn();
@@ -11,25 +13,27 @@ $(document).ready(function () {
         Add();
     });
 
-    setInterval("ChangeId()", 200);
+    $("#autoStart").click(function () {
+        g_id = $("#id").val();
+        timerHandle = setInterval("ChangeId()", 200);
+    });
+
+    $("#autoStop").click(function () {
+        clearInterval(timerHandle);
+    });
+
 });
 
-function ChangeId()
-{
-    $("#id").val(g_id);
-    g_id++;
-    Add();
+function GenerateID(str) {
+    var pad = "000000";
+    return pad.substring(0, pad.length - str.length) + str;
 }
 
-function ShowBtn() {
-    $.post("./Crawler.php",
-        {
-            ids: ['600694', '600012'],
-        },
-        function (data, textStatus, jqXHR) {
-            alert("data is: " + data);
-        }
-    );
+function ChangeId() {
+    var tmp = GenerateID(g_id.toString());
+    $("#id").val(tmp);
+    g_id++;
+    Add();
 }
 
 function Add() {
@@ -44,11 +48,17 @@ function Add() {
         },
         function (data, textStatus, jqXHR) {
             //alert("data is: " + data);
-            var json = JSON.parse(data);
-            if( json.id !== 0 )
-            {
+            var json;
+            try {
+                json = JSON.parse(data);
+            } catch (error) {
+                // alert(error);
+                return;
+            }
+            if (json.id !== 0) {
                 // alert("name is:"+json.name);
-                $("#infoList").append("<li>" + "id:[" + json.id + "] name:" + json.name + " value:" + json.value + "</li>");
+                // $("#infoList").append("<li>" + "id:[" + json.id + "] name:" + json.name + " value:" + json.value + "</li>");
+                $("#infoList").append("<p class="+"preP"+">id:</p><p class="+"sufP"+">"+json.id+"</p><p class="+"preP"+">name:</p><p class="+"sufP"+">"+json.name+"</p><p class="+"preP"+">value:</p><p class="+"sufP"+">"+json.value+"</p><br>")
             }
         }
     );
