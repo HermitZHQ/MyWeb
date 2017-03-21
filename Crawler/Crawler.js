@@ -1,4 +1,3 @@
-
 var g_id;
 
 $(document).ready(function () {
@@ -22,6 +21,12 @@ $(document).ready(function () {
         clearInterval(timerHandle);
     });
 
+    $('#id').bind('keypress', function (event) {
+        if (event.keyCode == "13") {
+            Add();
+        }
+    });
+
 });
 
 function GenerateID(str) {
@@ -42,8 +47,7 @@ function Add() {
         return;
     }
 
-    $.post("./Crawler.php",
-        {
+    $.post("./Crawler.php", {
             ids: $("#id").val(),
         },
         function (data, textStatus, jqXHR) {
@@ -58,7 +62,7 @@ function Add() {
             if (json.id !== 0) {
                 // alert("name is:"+json.name);
                 // $("#infoList").append("<li>" + "id:[" + json.id + "] name:" + json.name + " value:" + json.value + "</li>");
-                $("#infoList").append("<p class="+"preP"+">id:</p><p class="+"sufP"+">"+json.id+"</p><p class="+"preP"+">name:</p><p class="+"sufP"+">"+json.name+"</p><p class="+"preP"+">value:</p><p class="+"sufP"+">"+json.value+"</p><br>")
+                $("#infoList").append("<p class=" + "preP" + ">id:</p><p class=" + "sufP" + ">" + json.id + "</p><p class=" + "preP" + ">name:</p><p class=" + "sufP" + ">" + json.name + "</p><p class=" + "preP" + ">value:</p><p id=" + json.id + " class=" + "sufP" + ">" + json.value + "</p><br>");
             }
         }
     );
