@@ -10,6 +10,11 @@ if ($count == 0) {
     echo $response;
     return;
 }
+// else{
+//     $response = $count;
+//     echo $response;
+//     return;
+// }
 
 $ch = curl_init();
 //设置选项，包括URL
@@ -21,8 +26,19 @@ if ($count > 1) {
         $queryUrl = $queryUrl."s_sh".$idArr[$i].",";
     }
 } else {
-    $queryUrl = $queryUrl."s_sh".$idArr.",";
+    if ( is_array($idArr) )
+    {
+        $queryUrl = $queryUrl."s_sh".$idArr[0].",";
+    }
+    else{
+        $queryUrl = $queryUrl."s_sh".$idArr.",";
+    }
 }
+
+//test seg
+// $response = $queryUrl;
+// echo $response;
+// return;
 
 curl_setopt($ch, CURLOPT_URL, $queryUrl);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -36,33 +52,37 @@ $output = curl_exec($ch);
 //释放curl句柄
 curl_close($ch);
 
-$jsonArr = array();
+$response = $output;
+$response = mb_convert_encoding($response, "UTF-8", "GB2312");
+echo $response;
+return;
 
-//handle the data we got
-$infoArr = explode(";", $output);
-$count = count($infoArr);
-if ($count > 0) {
-    for ($i = 0; $i < $count; ++$i) {
-        $infoArr[$i] = mb_convert_encoding($infoArr[$i], "UTF-8", "GB2312");
-        $dataArr = explode("~", $infoArr[$i]);
-        if (count($dataArr) > 3) {
-            //index:1-name 3-latest value
-            // $response = $response.$dataArr[1].":".$dataArr[3]." ";
+// $jsonArr = array();
+// //handle the data we got
+// $infoArr = explode(";", $output);
+// $count = count($infoArr);
+// if ($count > 0) {
+//     for ($i = 0; $i < $count; ++$i) {
+//         $infoArr[$i] = mb_convert_encoding($infoArr[$i], "UTF-8", "GB2312");
+//         $dataArr = explode("~", $infoArr[$i]);
+//         if (count($dataArr) > 3) {
+//             //index:1-name 3-latest value
+//             // $response = $response.$dataArr[1].":".$dataArr[3]." ";
 
-            $jsonArr['name'] = $dataArr[1];
-            $jsonArr['id'] = $dataArr[2];
-            $jsonArr['value'] = $dataArr[3];
+//             $jsonArr['name'] = $dataArr[1];
+//             $jsonArr['id'] = $dataArr[2];
+//             $jsonArr['value'] = $dataArr[3];
 
-            $response = json_encode($jsonArr);
-            echo $response;
-            return;
-        } else {
-            $response = $infoArr[$i];
-            echo $response;
-            return;
-        }
-    }
-}
+//             $response = json_encode($jsonArr);
+//             echo $response;
+//             return;
+//         } else {
+//             $response = $infoArr[$i];
+//             echo $response;
+//             return;
+//         }
+//     }
+// }
 
 // $response = $queryUrl;
 $response = "empty...";

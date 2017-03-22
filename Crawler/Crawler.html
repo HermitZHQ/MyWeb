@@ -7,25 +7,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="Crawler.css" rel="stylesheet">
     <script src="../JQuery/jquery-3.1.1.min.js"></script>
+    <link href="../Simpletooltip-1.3.0/dist/css/simpletooltip.min.css" rel="stylesheet" media="screen">
+    <script src="../Simpletooltip-1.3.0/dist/js/simpletooltip.min.js"></script>
+    <script src="../Utility/HashMap.js"></script>
     <script src="Crawler.js"></script>
 </head>
 
 <body>
     <div class="mixArea">
-        <button id="showInfo">Show</button>
+        <h1 class="simpletooltip" title="Just works! cool :)" data-simpletooltip-position="right" data-simpletooltip-theme="white">Stock Assist Tool</h1>
+        ID: <input id="id" type="text" value="600694">
+        <br>Comment:<br><textarea id="comment"></textarea><br>
         <button id="add">AddOne</button>
         <button id="autoStart">AutoStart</button>
         <button id="autoStop">AutoStop</button>
-        <input id="id" type="text" value="000001">
+        <button id="record">Record to db</button>
     </div>
 
     <div class="listArea">
         <ul id="infoList">
-            <li id="600694">
+            <!--<li id="600694">-->
                 <!--<p class="preP">id:</p><p class="sufP">600694</p><p class="preP">name:</p><p class="sufP">dashang</p><p class="preP">value:</p><p class="sufP">42.99</p>
                 <br>
                 <p class="preP">id:</p><p class="sufP">600028</p><p class="preP">name:</p><p class="sufP">zhongshiyou</p><p class="preP">value:</p><p class="sufP">8.39</p>-->
-            </li>
+            <!--</li>-->
         </ul>
     </div>
 </body>

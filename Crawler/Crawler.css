@@ -1,33 +1,43 @@
 .mixArea{
     background-color: #666666;
     display: block;
-    position: fixed;
+    /*position: fixed;
     left: 0;
-    top: 0;
+    top: 0;*/
     width: 100%;
     height: auto;
 }
 
+.mixArea textarea{
+    width: 60%;
+    height: 120px;
+}
+
 .listArea{
-    width: auto;
-    height: auto;
+    /*width: auto;*/
+    /*height: auto;*/
     background-color: #999999;
-    margin-top: 30px;
+    margin-top: -15px;
     /*display: block;*/
+    /*float: left;*/
 }
 
 .listArea ul{
     list-style: none;
 }
 
+.listArea ul li{
+    margin-bottom: -35px;
+}
+
 .listArea .preP{
-    width: auto;
+    width: 50px;
     padding-right: 3px;
     display: inline-block;
 }
 
 .listArea .sufP{
-    width: 8%;
+    width: 130px;
     /*padding-right: 15px;*/
     display: inline-block;
 }

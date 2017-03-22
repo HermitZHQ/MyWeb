@@ -1,0 +1,1 @@
+INSERT INTO stock_assistant.stock_info (id,name,value,tvalue,comment) values('600722','金牛化工','10.72','10.72','测试注释信息') on duplicate key update name='金牛化工', value='10.72', tvalue='10.72', comment='测试注释信息'
