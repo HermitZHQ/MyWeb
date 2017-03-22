@@ -10,6 +10,10 @@ $(document).ready(function () {
         RecordToDB();
     });
 
+    $("#load").click(function () {
+        LoadFromDB();
+    });
+
     $("#add").click(function () {
         AddOneInfo();
     });
@@ -32,9 +36,41 @@ $(document).ready(function () {
     setInterval('UpdateInfo()', 4500);
 });
 
+function LoadFromDB() {
+    $.post("./LoadFromDB.php",
+        {
+
+        },
+        function (data, textStatus, jqXHR) {
+            // alert(data);
+            var jsonArr = JSON.parse(data);
+            if (jsonArr.length > 0) {
+                for (var i = 0; i < jsonArr.length; i++) {
+                    var json = JSON.parse(jsonArr[i]);
+                    //comment id:cmt+id
+                    //value id:id
+                    //add li to dom
+                    alert("<li><p class=" + "preP" + ">id:</p><p id=\"" + "cmt" + json.id + "\" data-simpletooltip=init title=\"" + json.comment + "\" class=" + "sufP" + ">" + json.id + "</p><p class=" + "preP" + ">name:</p><p class=" + "sufP" + ">" + json.name + "</p><p class=" + "preP" + ">value:</p><p id=" + json.id + " class=" + "sufP" + ">" + json.value + "</p></li><br>");
+                    $("#infoList").append("<li><p class=" + "preP" + ">id:</p><p id=\"" + "cmt" + json.id + "\" data-simpletooltip=init title=\"" + json.comment + "\" class=" + "sufP" + ">" + json.id + "</p><p class=" + "preP" + ">name:</p><p class=" + "sufP" + ">" + json.name + "</p><p class=" + "preP" + ">value:</p><p id=" + json.id + " class=" + "sufP" + ">" + json.value + "</p></li><br>");
+
+                    //update HashMap with json info, we will use this info to record to db
+                    var json2 = {
+                        id: json.id,
+                        name: json.name,
+                        value: json.value,
+                        tvalue: json.tvalue,
+                        comment: json.comment
+                    };
+                    g_idMap.put(json.id, json2);
+                }
+            }
+        }
+    );
+}
+
 function RecordToDB() {
     var s = g_idMap.size();
-    if ( s === 0 ){
+    if (s === 0) {
         return;
     }
 
@@ -44,11 +80,10 @@ function RecordToDB() {
     idArr = g_idMap.keySet();
     infoArr = g_idMap.values();
 
-    $.post("./CrawlerDB.php",
-        {
-            ids:idArr,
-            infos:infoArr
-        },
+    $.post("./SaveToDB.php", {
+        ids: idArr,
+        infos: infoArr
+    },
         function (data, textStatus, jqXHR) {
             alert(data);
         }
@@ -62,10 +97,9 @@ function UpdateInfo() {
 
     var idArr = g_idMap.keySet();
 
-    $.post("./Crawler.php",
-        {
-            ids: idArr
-        },
+    $.post("./Crawler.php", {
+        ids: idArr
+    },
         function (data, textStatus, jqXHR) {
             //alert(data);
 
