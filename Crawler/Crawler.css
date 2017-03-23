@@ -13,11 +13,19 @@
     height: 120px;
 }
 
+#toTop{
+    position: fixed;
+    bottom: 40px;
+    right: 0px;
+}
+
 .listArea{
-    /*width: auto;*/
+    color: red;
+    width: 600px;
     /*height: auto;*/
     background-color: #999999;
     margin-top: -15px;
+    font-style: bold;
     /*display: block;*/
     /*float: left;*/
 }
@@ -41,3 +49,20 @@
     /*padding-right: 15px;*/
     display: inline-block;
 }
+
+.tipArea{
+    /*float: left;*/
+    display: block;
+    background-color: red;
+    position: fixed;
+    right: 10px;
+    top: 20px;
+    width: 200px;
+    height: auto;
+    text-align: center;
+    overflow: auto;
+}
+
+/*.tipArea ul{
+    list-style: none;
+}*/

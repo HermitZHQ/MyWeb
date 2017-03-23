@@ -33,8 +33,16 @@ $(document).ready(function () {
         }
     });
 
+    $("#toTop").click(function () {
+        ToTop();
+    });
+
     setInterval('UpdateInfo()', 4500);
 });
+
+function ToTop() {
+    self.location.href = "#topAnchor";
+}
 
 function LoadFromDB() {
     $.post("./LoadFromDB.php",
@@ -47,11 +55,11 @@ function LoadFromDB() {
             if (jsonArr.length > 0) {
                 for (var i = 0; i < jsonArr.length; i++) {
                     var json = JSON.parse(jsonArr[i]);
-                    //comment id:cmt+id
+                    //comment id:cmt+id(we can use this id to update the comment)
                     //value id:id
                     //add li to dom
-                    alert("<li><p class=" + "preP" + ">id:</p><p id=\"" + "cmt" + json.id + "\" data-simpletooltip=init title=\"" + json.comment + "\" class=" + "sufP" + ">" + json.id + "</p><p class=" + "preP" + ">name:</p><p class=" + "sufP" + ">" + json.name + "</p><p class=" + "preP" + ">value:</p><p id=" + json.id + " class=" + "sufP" + ">" + json.value + "</p></li><br>");
-                    $("#infoList").append("<li><p class=" + "preP" + ">id:</p><p id=\"" + "cmt" + json.id + "\" data-simpletooltip=init title=\"" + json.comment + "\" class=" + "sufP" + ">" + json.id + "</p><p class=" + "preP" + ">name:</p><p class=" + "sufP" + ">" + json.name + "</p><p class=" + "preP" + ">value:</p><p id=" + json.id + " class=" + "sufP" + ">" + json.value + "</p></li><br>");
+                    var strID = PadIDWithZero(json.id);
+                    $("#infoList").append("<li><p class=" + "preP" + ">id:</p><p id=\"" + "cmt" + strID + "\" data-simpletooltip=init title=\"" + json.comment + "\" class=" + "sufP" + ">" + strID + "</p><p class=" + "preP" + ">name:</p><p class=" + "sufP" + ">" + json.name + "</p><p class=" + "preP" + ">value:</p><p id=" + strID + " class=" + "sufP tvalue=" + json.tvalue + ">" + json.value + "</p></li><br>");
 
                     //update HashMap with json info, we will use this info to record to db
                     var json2 = {
@@ -61,11 +69,24 @@ function LoadFromDB() {
                         tvalue: json.tvalue,
                         comment: json.comment
                     };
-                    g_idMap.put(json.id, json2);
+                    g_idMap.put(strID, json2);
                 }
+
+                $(document).click(function(e){
+                    HandleListAreaPClick(e);
+                });
             }
         }
     );
+}
+
+function HandleListAreaPClick(e){
+    if ($(e.target).is("p") === true && typeof($(e.target).attr("tvalue")) !== "undefined")
+    {
+        $("#tvalue").val($(e.target).attr("tvalue"));
+        $("#comment").val($("#cmt"+$(e.target).attr("id")).attr("title"));
+        $("#id").val($(e.target).attr("id"));
+    }
 }
 
 function RecordToDB() {
@@ -97,6 +118,7 @@ function UpdateInfo() {
 
     var idArr = g_idMap.keySet();
 
+    //update list data
     $.post("./Crawler.php", {
         ids: idArr
     },
@@ -108,6 +130,8 @@ function UpdateInfo() {
                 return;
             }
 
+            $("#tipList").empty();
+
             //semicolon will separate the data to two, the second part is "\n", we should ignore it
             for (var i = 0; i < infoArr.length - 1; i++) {
                 var dataArr = infoArr[i].split("~");
@@ -116,18 +140,24 @@ function UpdateInfo() {
                 }
 
                 $("#" + dataArr[2]).html(dataArr[3]);
+
+                //update tip list
+                if (dataArr[3] < parseFloat($("#"+dataArr[2]).attr("tvalue"))) {
+                    $("#tipList").append("<li>"+dataArr[2]+":"+dataArr[1]+"("+dataArr[3]+"/"+$("#"+dataArr[2]).attr("tvalue")+")</li>");
+                }
             }
         }
     );
+
 }
 
-function GenerateID(str) {
+function PadIDWithZero(str) {
     var pad = "000000";
     return pad.substring(0, pad.length - str.length) + str;
 }
 
 function ChangeId() {
-    var tmp = GenerateID(g_id.toString());
+    var tmp = PadIDWithZero(g_id.toString());
     $("#id").val(tmp);
     g_id++;
     AddOneInfo();
@@ -139,8 +169,22 @@ function AddOneInfo() {
         return;
     }
 
-    //don't add repeat id
+    //don't add repeat id, but we should update it
     if (g_idMap.containsKey($("#id").val())) {
+        $("#cmt" + $("#id").val()).attr("title", $("#comment").val());
+        var json = g_idMap.get($("#id").val());
+        json.comment = $("#comment").val();
+        json.tvalue = $("#tvalue").val();
+        g_idMap.put($("#id").val(), json);
+
+        //update element content
+        $("#"+json.id).attr("tvalue", $("#tvalue").val());
+
+        //clear ele content
+        $("#comment").val("");
+        $("#tvalue").val("");
+        $("#id").val("");
+
         return;
     }
 
@@ -166,20 +210,21 @@ function AddOneInfo() {
                 }
                 // alert($("#comment").val());
 
-                //comment id:cmt+id
+                //comment id:cmt+id(we can use this id to update the comment)
                 //value id:id
                 //add li to dom
-                $("#infoList").append("<li><p class=" + "preP" + ">id:</p><p id=\"" + "cmt" + dataArr[2] + "\" data-simpletooltip=init title=\"" + $("#comment").val() + "\" class=" + "sufP" + ">" + dataArr[2] + "</p><p class=" + "preP" + ">name:</p><p class=" + "sufP" + ">" + dataArr[1] + "</p><p class=" + "preP" + ">value:</p><p id=" + dataArr[2] + " class=" + "sufP" + ">" + dataArr[3] + "</p></li><br>");
+                $("#infoList").append("<li><p class=" + "preP" + ">id:</p><p id=\"" + "cmt" + dataArr[2] + "\" data-simpletooltip=init title=\"" + $("#comment").val() + "\" class=" + "sufP" + ">" + dataArr[2] + "</p><p class=" + "preP" + ">name:</p><p class=" + "sufP" + ">" + dataArr[1] + "</p><p class=" + "preP" + ">value:</p><p id=" + dataArr[2] + " class=" + "sufP tvalue=" + $("#tvalue").val() + ">" + dataArr[3] + "</p></li><br>");
 
                 //update HashMap with json info, we will use this info to record to db
                 var json = {
                     id: dataArr[2],
                     name: dataArr[1],
                     value: dataArr[3],
-                    tvalue: dataArr[3],
+                    tvalue: $("#tvalue").val(),
                     comment: $("#comment").val()
                 };
                 g_idMap.put(dataArr[2], json);
+                $("#comment").val("");
             }
         }
     );

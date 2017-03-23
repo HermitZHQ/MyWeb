@@ -14,9 +14,11 @@
 </head>
 
 <body>
+    <button id="toTop">toTop</button>
     <div class="mixArea">
-        <h1 class="simpletooltip" title="Just works! cool :)" data-simpletooltip-position="right" data-simpletooltip-theme="white">Stock Assist Tool</h1>
+        <h1 id="topAnchor" class="simpletooltip" title="Just works! cool :)" data-simpletooltip-position="right" data-simpletooltip-theme="white">Stock Assist Tool</h1>
         ID: <input id="id" type="text" value="600694">
+        TipValue: <input id="tvalue" type="text" value="0.0">
         <br>Comment:<br><textarea id="comment"></textarea><br>
         <button id="add">AddOne</button>
         <button id="autoStart">AutoStart</button>
@@ -32,6 +34,12 @@
                 <br>
                 <p class="preP">id:</p><p class="sufP">600028</p><p class="preP">name:</p><p class="sufP">zhongshiyou</p><p class="preP">value:</p><p class="sufP">8.39</p>-->
             <!--</li>-->
+        </ul>
+    </div>
+
+    <div class="tipArea">
+        <p>----invest zone----</p>
+        <ul id="tipList">
         </ul>
     </div>
 </body>

@@ -21,18 +21,15 @@ $ch = curl_init();
 //http://qt.gtimg.cn/q=sh600694
 //http://qt.gtimg.cn/q=s_sh600694,s_sh601988,s_sz000701,s_sh600012,s_sh600028,s_sh600694,s_sh601717,s_sz000002
 $queryUrl = "http://qt.gtimg.cn/q=";
-if ($count > 1) {
+
+$sh = "s_sh";
+$sz = "s_sz";
+if (is_array($idArr)) {
     for ($i = 0; $i < $count; ++$i) {
-        $queryUrl = $queryUrl."s_sh".$idArr[$i].",";
+        $queryUrl = $idArr[$i] >= 600000 ? ($queryUrl.$sh.$idArr[$i].",") : ($queryUrl.$sz.$idArr[$i].",");
     }
 } else {
-    if ( is_array($idArr) )
-    {
-        $queryUrl = $queryUrl."s_sh".$idArr[0].",";
-    }
-    else{
-        $queryUrl = $queryUrl."s_sh".$idArr.",";
-    }
+    $queryUrl = $idArr >= 600000 ? ($queryUrl.$sh.$idArr.",") : ($queryUrl.$sz.$idArr.",");
 }
 
 //test seg
@@ -88,5 +85,3 @@ return;
 $response = "empty...";
 // $response = mb_convert_encoding($response, "UTF-8", "GB2312");
 echo $response;
-
-?>
