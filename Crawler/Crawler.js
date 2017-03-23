@@ -37,8 +37,16 @@ $(document).ready(function () {
         ToTop();
     });
 
+    $("#find").click(function(){
+        Find();
+    });
+
     setInterval('UpdateInfo()', 4500);
 });
+
+function Find(){
+    self.location.href = "#"+$("#id").val();
+}
 
 function ToTop() {
     self.location.href = "#topAnchor";
