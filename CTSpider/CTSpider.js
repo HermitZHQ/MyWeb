@@ -6,6 +6,8 @@ $(document).ready(function () {
 });
 
 function Test() {
+
+    //
     $.post("./CTSpider.php",
         {
 
