@@ -1,7 +1,4 @@
 <?php
-
-//#define ENABLE_DEBUG_INFO
-
 //remove the first left one and first right one
 function RemoveStrMark(&$str, $leftC = "\"", $rightC = "\"")
 {
@@ -13,7 +10,8 @@ function RemoveStrMark(&$str, $leftC = "\"", $rightC = "\"")
 error_reporting(0);
 header("Access-Control-Allow-Origin:*");
 
-$queryID = 600694;
+$bEnableDebugInfo = true;
+$queryID = "000948";
 
 //基本url
 $url = "http://www.ichangtou.com/ichangtou/greet";
@@ -52,9 +50,9 @@ $value = RemoveStrMark($infoArr[2]);
 $totalValue = RemoveStrMark($infoArr[3], "\"", "(");
 $pb = RemoveStrMark($infoArr[6]);
 
-#ifdef ENABLE_DEBUG_INFO
-echo "id:$id, value:$value, totalValue:$totalValue, pb:$pb\n";
-#endif
+if ($bEnableDebugInfo) {
+    echo "id:$id, value:$value, totalValue:$totalValue, pb:$pb\n";
+}
 // return;
 
 //资产负债表分页
@@ -92,7 +90,7 @@ foreach ($infoArr as $var) {
         $iTradeAssetsCount = $iCount;
     }
 
-        if (0 == strcmp( $var, "\"0\"" )) {
+    if (0 == strcmp( $var, "\"0\"" )) {
         $iFirstZeroCount = $iCount + 1;
     }
 
@@ -103,11 +101,11 @@ foreach ($infoArr as $var) {
     ++$iCount;
 }
 
-#ifdef ENABLE_DEBUG_INFO
-echo "first zero count:$iFirstZeroCount\n";
-#endif
+if ($bEnableDebugInfo) {
+    echo "first zero count:$iFirstZeroCount\n";
+}
 
-if ( 0 == $iTradeAssetsCount ){
+if (0 == $iTradeAssetsCount) {
     echo "couldn't find trade assets, type error, maybe it's a bank stock...";
     return;
 }
@@ -120,16 +118,16 @@ if ($yearCount < 3) {
 
 $startDataIndex = count($dataArr) - count($infoArr) - 5;
 $checkYearCount = $dataArr[$startDataIndex - 1] - 1;
-if ($checkYearCount != $yearCount){
+if ($checkYearCount != $yearCount) {
     echo "verify year count failed, dataArr-yearCount:$checkYearCount, yearCount:$yearCount";
     return;
 }
 
 $latestYear = RemoveStrMark($infoArr[$iFormTypeCount - 1], "\"", "#");
 
-#ifdef ENABLE_DEBUG_INFO
-echo "latestYear:$latestYear, yearCount:$yearCount\n";
-#endif
+if ($bEnableDebugInfo) {
+    echo "latestYear:$latestYear, yearCount:$yearCount\n";
+}
 // return;
 
 $iCount = 0;
@@ -193,10 +191,9 @@ foreach ($infoArr as $var) {
         //由于数据是逆向排列的，所以这里是减回去
         $dataIndex = $startDataIndex - (2+$yearCount+1)*($Cash1Row-1);
         //注意这里也是减，开始写成+号出bug了，很容易忘记是逆向的
-        if ( $dataArr[$dataIndex-$yearCount-2] == $iFirstZeroCount ){
+        if ($dataArr[$dataIndex-$yearCount-2] == $iFirstZeroCount) {
             $cash1 = 0;
-        }
-        else{
+        } else {
             $tmp = $infoArr[$iCash1NextTitleCount-1];
             $cash1 = floatval(RemoveStrMark($tmp));
             // echo "cash1:$cash1";
@@ -208,10 +205,9 @@ foreach ($infoArr as $var) {
         $bCash2NextTitleFlag = true;
 
         $dataIndex = $startDataIndex - (2+$yearCount+1)*($Cash2Row-1);
-        if ( $dataArr[$dataIndex-$yearCount-2] == $iFirstZeroCount ){
+        if ($dataArr[$dataIndex-$yearCount-2] == $iFirstZeroCount) {
             $cash2 = 0;
-        }
-        else{
+        } else {
             $tmp = $infoArr[$iCash2NextTitleCount-1];
             $cash2 = floatval(RemoveStrMark($tmp));
             // echo "cash2:$cash2";
@@ -223,10 +219,9 @@ foreach ($infoArr as $var) {
         $bCurrentAssetsNextTitleFlag = true;
 
         $dataIndex = $startDataIndex - (2+$yearCount+1)*($currentAssetsRow-1);
-        if ( $dataArr[$dataIndex-$yearCount-2] == $iFirstZeroCount ){
+        if ($dataArr[$dataIndex-$yearCount-2] == $iFirstZeroCount) {
             $currentAssets = 0;
-        }
-        else{
+        } else {
             $tmp = $infoArr[$iCurrentAssetsNextTitleCount-1];
             $currentAssets = floatval(RemoveStrMark($tmp));
             // echo "currentAssets:$currentAssets";
@@ -238,10 +233,9 @@ foreach ($infoArr as $var) {
         $bFixedAssets1NextTitleFlag = true;
 
         $dataIndex = $startDataIndex - (2+$yearCount+1)*($fixedAssets1Row-1);
-        if ( $dataArr[$dataIndex-$yearCount-2] == $iFirstZeroCount ){
-            $currentAssets = 0;
-        }
-        else{
+        if ($dataArr[$dataIndex-$yearCount-2] == $iFirstZeroCount) {
+            $fixedAssets1 = 0;
+        } else {
             $tmp = $infoArr[$iFixedAssets1NextTitleCount-1];
             $fixedAssets1 = floatval(RemoveStrMark($tmp));
             // echo "fixedAssets1:$fixedAssets1";
@@ -253,10 +247,9 @@ foreach ($infoArr as $var) {
         $bFixedAssets2NextTitleFlag = true;
 
         $dataIndex = $startDataIndex - (2+$yearCount+1)*($fixedAssets2Row-1);
-        if ( $dataArr[$dataIndex-$yearCount-2] == $iFirstZeroCount ){
-            $currentAssets = 0;
-        }
-        else{
+        if ($dataArr[$dataIndex-$yearCount-2] == $iFirstZeroCount) {
+            $fixedAssets2 = 0;
+        } else {
             $tmp = $infoArr[$iFixedAssets2NextTitleCount-1];
             $fixedAssets2 = floatval(RemoveStrMark($tmp));
             // echo "fixedAssets2:$fixedAssets2";
@@ -268,10 +261,9 @@ foreach ($infoArr as $var) {
         $bFixedAssets3NextTitleFlag = true;
 
         $dataIndex = $startDataIndex - (2+$yearCount+1)*($fixedAssets3Row-1);
-        if ( $dataArr[$dataIndex-$yearCount-2] == $iFirstZeroCount ){
-            $currentAssets = 0;
-        }
-        else{
+        if ($dataArr[$dataIndex-$yearCount-2] == $iFirstZeroCount) {
+            $fixedAssets3 = 0;
+        } else {
             $tmp = $infoArr[$iFixedAssets3NextTitleCount-1];
             $fixedAssets3 = floatval(RemoveStrMark($tmp));
             // echo "fixedAssets3:$fixedAssets3";
@@ -283,10 +275,9 @@ foreach ($infoArr as $var) {
         $bShortLoanNextTitleFlag = true;
 
         $dataIndex = $startDataIndex - (2+$yearCount+1)*($shortLoanRow-1);
-        if ( $dataArr[$dataIndex-$yearCount-2] == $iFirstZeroCount ){
-            $currentAssets = 0;
-        }
-        else{
+        if ($dataArr[$dataIndex-$yearCount-2] == $iFirstZeroCount) {
+            $shortLoan = 0;
+        } else {
             $tmp = $infoArr[$iShortLoanNextTitleCount-1];
             $shortLoan = floatval(RemoveStrMark($tmp));
             // echo "shortLoan:$shortLoan";
@@ -298,10 +289,9 @@ foreach ($infoArr as $var) {
         $bLongLoanNextTitleFlag = true;
 
         $dataIndex = $startDataIndex - (2+$yearCount+1)*($longLoanRow-1);
-        if ( $dataArr[$dataIndex-$yearCount-2] == $iFirstZeroCount ){
-            $currentAssets = 0;
-        }
-        else{
+        if ($dataArr[$dataIndex-$yearCount-2] == $iFirstZeroCount) {
+            $longLoan = 0;
+        } else {
             $tmp = $infoArr[$iLongLoanNextTitleCount-1];
             $longLoan = floatval(RemoveStrMark($tmp));
             // echo "longLoan:$longLoan";
@@ -313,27 +303,28 @@ foreach ($infoArr as $var) {
         $bbondsPayableNextTitleFlag = true;
 
         $dataIndex = $startDataIndex - (2+$yearCount+1)*($bondsPayableRow-1);
-        if ( $dataArr[$dataIndex-$yearCount-2] == $iFirstZeroCount ){
-            $currentAssets = 0;
-        }
-        else{
+        if ($dataArr[$dataIndex-$yearCount-2] == $iFirstZeroCount) {
+            $bondsPayable = 0;
+        } else {
             $tmp = $infoArr[$ibondsPayableNextTitleCount-1];
             $bondsPayable = floatval(RemoveStrMark($tmp));
             // echo "bondsPayable:$bondsPayable";
         }
     }
 
-    if ($bbondsPayableNextTitleFlag){
+    if ($bbondsPayableNextTitleFlag) {
         break;
     }
 
     ++$iCount;
 }
 
-#ifdef ENABLE_DEBUG_INFO
-echo "Cash:".($cash1+$cash2)." CurrentAssets:".$currentAssets." FixedAssets:".($fixedAssets1+$fixedAssets2+$fixedAssets3).
-" ShortLoan:".$shortLoan." LongLoan:".$longLoan." BondsPayable:".$bondsPayable."\n";
-#endif
+$fixedAssets = $fixedAssets1+$fixedAssets2+$fixedAssets3;
+$cash = $cash1+$cash2;
+if ($bEnableDebugInfo) {
+    echo "Cash:".($cash)." CurrentAssets:".$currentAssets." FixedAssets:".($fixedAssets).
+    " ShortLoan:".$shortLoan." LongLoan:".$longLoan." BondsPayable:".$bondsPayable."\n";
+}
 // $response = $longLoan2;
 
 //综合损益表分页
@@ -381,12 +372,13 @@ $totalProfitArr = array();
 $totalProfitFlag = false;
 $retainedProfitArr = array();
 $retainedProfitFlag = false;
+$ebitArr = array();
 
 $iCount = 0;
 foreach ($infoArr as $var) {
     if (!$financialCostFlag && $var == "\"财务费用\"") {
         $financialCostFlag = true;
-        for ($i=0; $i < $yearCount; $i++) { 
+        for ($i=0; $i < $yearCount; $i++) {
             $tmp = $infoArr[$iCount+1+$i];
             $tmp = floatval(RemoveStrMark($tmp));
             $financialCostArr[] = $tmp;
@@ -395,7 +387,7 @@ foreach ($infoArr as $var) {
 
     if (!$totalProfitFlag && $var == "\"利润总额\"") {
         $totalProfitFlag = true;
-        for ($i=0; $i < $yearCount; $i++) { 
+        for ($i=0; $i < $yearCount; $i++) {
             $tmp = $infoArr[$iCount+1+$i];
             $tmp = floatval(RemoveStrMark($tmp));
             $totalProfitArr[] = $tmp;
@@ -404,7 +396,7 @@ foreach ($infoArr as $var) {
 
     if (!$retainedProfitFlag && $var == "\"净利润\"") {
         $retainedProfitFlag = true;
-        for ($i=0; $i < $yearCount; $i++) { 
+        for ($i=0; $i < $yearCount; $i++) {
             $tmp = $infoArr[$iCount+1+$i];
             $tmp = floatval(RemoveStrMark($tmp));
             $retainedProfitArr[] = $tmp;
@@ -414,10 +406,37 @@ foreach ($infoArr as $var) {
     ++$iCount;
 }
 
-#ifdef ENABLE_DEBUG_INFO
-echo "first zero count:$iFirstZeroCount\n";
-echo "first financial cost:".$financialCostArr[0]."\n";
-#endif
+for ($i=0; $i < $yearCount; $i++) { 
+    $ebitArr[$i] = $totalProfitArr[$i] + $financialCostArr[$i];
+    // echo "ebitArr($i):".$ebitArr[$i]."\n";
+}
+
+$totalEbitIncrease = 0;
+$AverageEbitIncrease = 0;
+for ($i=$yearCount-1; $i >= 1 ; $i--) { 
+    $totalEbitIncrease += (($ebitArr[$i] - $ebitArr[$i-1])/abs($ebitArr[$i-1]));
+}
+
+$AverageEbitIncrease = $totalEbitIncrease / ($yearCount-1);
+$ebitAdjustedYear = 0;
+if ( $AverageEbitIncrease > 0.2 ){
+    $ebitAdjustedYear = 2;
+}
+else if ($AverageEbitIncrease >= 0.05){
+    $ebitAdjustedYear = 1;
+}
+else if ($AverageEbitIncrease >= 0){
+    $ebitAdjustedYear = 0;
+}
+else{
+    $ebitAdjustedYear = -1;
+}
+
+if ($bEnableDebugInfo) {
+    echo "AverageEbitIncrease:".$AverageEbitIncrease." ebitAdjustedYear:".$ebitAdjustedYear."\n";
+    echo "first zero count:$iFirstZeroCount\n";
+    echo "first financial cost:".$financialCostArr[0]."\n";
+}
 
 //财务比率表
 //7|0|9|http://www.ichangtou.com/ichangtou/|61B460404EE22A76E213EC9F66BFBFCE|com.ichangtou.webproject.client.GreetingService|getGridData|java.lang.String/2004016611|I|600694|F|Q4|1|2|3|4|4|5|5|6|5|7|8|10|9|
@@ -438,15 +457,93 @@ $infoArr = explode(",", $response);
 $iCount = 0;
 $roicArr = array();
 $roicFlag = false;
+$capitalCostArr = array();
+$capitalCostFlag = false;
+$retainedCashFlowArr = array();
+$retainedCashFlowFlag = false;
 
+//同理，由于前面计算过总列数，所以无需重复计算，直接从标题开始取值
 foreach ($infoArr as $var) {
+    if (!$roicFlag && $var == "\"ROIC 投资回报率\"") {
+        $roicFlag = true;
+        for ($i=0; $i < $yearCount; $i++) {
+            $tmp = $infoArr[$iCount+1+$i];
+            $roicArr[] = floatval(RemoveStrMark($tmp));
+        }
+    }
+
+    if (!$capitalCostFlag && $var == "\"资本开支\"") {
+        $capitalCostFlag = true;
+        for ($i=0; $i < $yearCount; $i++) {
+            $tmp = $infoArr[$iCount+1+$i];
+            $capitalCostArr[] = floatval(RemoveStrMark($tmp));
+        }
+    }
+
+    if (!$retainedCashFlowFlag && $var == "\"净现金流\"") {
+        $retainedCashFlowFlag = true;
+        for ($i=0; $i < $yearCount; $i++) {
+            $tmp = $infoArr[$iCount+1+$i];
+            $retainedCashFlowArr[] = floatval(RemoveStrMark($tmp));
+        }
+    }
 
     ++$iCount;
 }
 
+//----bear base value
+$totalRetainedCashFlow = 0;
+$totalCapitalCost = 0;
+for ($i=0; $i < $yearCount; $i++) { 
+    $totalRetainedCashFlow += $retainedCashFlowArr[$i];
+    $totalCapitalCost += $capitalCostArr[$i];
+}
+$bearBaseValue = $totalRetainedCashFlow / $totalCapitalCost;
+$bearAdjustedYear = 0;
+if ($bearBaseValue < 0.1){
+    $bearAdjustedYear = -1;
+}
+else{
+    $bearAdjustedYear = 0;
+}
 
-#ifdef ENABLE_DEBUG_INFO
-// echo "first zero count:$iFirstZeroCount\n";
-#endif
+//----safe bound adjust
+$safeBoundAdjusted = 0;
+$minusRoicCount = 0;
+for ($i=0; $i < $yearCount; $i++) { 
+    if ( $roicArr[$i] < 0 ){
+        ++$minusRoicCount;
+    }
+}
+
+if ($minusRoicCount >= 2){
+    $safeBoundAdjusted -= 0.2;
+}
+else if($minusRoicCount > 0){
+    $safeBoundAdjusted -= 0.1;
+}
+
+if ($bEnableDebugInfo) {
+    echo "bearBaseValue:".$bearBaseValue." bearAdjustedYear:".$bearAdjustedYear."\n";
+    echo "safeBoundAdjusted".$safeBoundAdjusted." first ROIC:".$roicArr[0]." first capitalCost:".$capitalCostArr[0]."\n";
+}
+
+$expectPaybackYear = 10;
+$finalPaybackYear = $expectPaybackYear + $ebitAdjustedYear + $bearAdjustedYear;
+$safeBound = 0.8;
+$finalSafeBound = $safeBound + $safeBoundAdjusted;
+$totalRoic = 0;
+for ($i=0; $i < $yearCount; $i++) {
+    $totalRoic += $roicArr[$i];
+}
+$averageRoic = $totalRoic / (float)$yearCount;
+
+$precisionAssessmentTotalValue = (($currentAssets + $fixedAssets)*$finalPaybackYear*$averageRoic+$cash-$shortLoan-$longLoan-$bondsPayable)*$finalSafeBound;
+$precisionAssessmentValue = $precisionAssessmentTotalValue / $totalValue * $value;
+if ($bEnableDebugInfo) {
+    echo "precisionAssessmentTotalValue:".$precisionAssessmentTotalValue." totalRoic:".$totalRoic." averageRoic:".$averageRoic."\n";
+}
+
+echo "precisionAssessmentValue:$precisionAssessmentValue";
 
 curl_close($ch);
