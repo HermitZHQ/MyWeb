@@ -10,14 +10,15 @@ function RemoveStrMark(&$str, $leftC = "\"", $rightC = "\"")
 error_reporting(0);
 header("Access-Control-Allow-Origin:*");
 
-$bEnableDebugInfo = true;
-$queryID = "600694";
+$bEnableDebugInfo = false;
+$queryID = $_POST["id"];
 
+//公司名称+公司分类
+//7|0|7|http://www.ichangtou.com/ichangtou/|61B460404EE22A76E213EC9F66BFBFCE|com.ichangtou.webproject.client.GreetingService|getStkcdNameSuggestion|java.lang.String/2004016611|I|600694|1|2|3|4|2|5|6|7|10|
 //基本url
 $url = "http://www.ichangtou.com/ichangtou/greet";
-//公司简介分页
-$post_data_pre = "7|0|6|http://www.ichangtou.com/ichangtou/|61B460404EE22A76E213EC9F66BFBFCE|com.ichangtou.webproject.client.GreetingService|getCompanyRatios|java.lang.String/2004016611|";
-$post_data_suf = "|1|2|3|4|1|5|6|";
+$post_data_pre = "7|0|7|http://www.ichangtou.com/ichangtou/|61B460404EE22A76E213EC9F66BFBFCE|com.ichangtou.webproject.client.GreetingService|getStkcdNameSuggestion|java.lang.String/2004016611|I|";
+$post_data_suf = "|1|2|3|4|2|5|6|7|10|";
 $post_data = $post_data_pre.$queryID.$post_data_suf;
 
 $ch = curl_init();
@@ -32,10 +33,27 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, array(
     'Content-Length: ' . strlen($post_data),
     'X-GWT-Permutation:E518E025620D5EA148529190B19E8E17'));
 $output = curl_exec($ch);
+
+$response;
+$response = RemoveStrMark($output, "[", "]");
+$response = RemoveStrMark($response, "[", "]");
+$infoArr = explode(",", $response);
+$name = RemoveStrMark($infoArr[3]);
+
+//公司简介分页
+$post_data_pre = "7|0|6|http://www.ichangtou.com/ichangtou/|61B460404EE22A76E213EC9F66BFBFCE|com.ichangtou.webproject.client.GreetingService|getCompanyRatios|java.lang.String/2004016611|";
+$post_data_suf = "|1|2|3|4|1|5|6|";
+$post_data = $post_data_pre.$queryID.$post_data_suf;
+curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+    'Content-Type: text/x-gwt-rpc; charset=UTF-8',
+    'Content-Length: ' . strlen($post_data),
+    'X-GWT-Permutation:E518E025620D5EA148529190B19E8E17'));
+$output = curl_exec($ch);
+
 //打印获得的数据
 // print_r($output);
 
-$response;
 $response = RemoveStrMark($output, "[", "]");
 $response = RemoveStrMark($response, "[", "]");
 $infoArr = explode(",", $response);
@@ -102,7 +120,7 @@ foreach ($infoArr as $var) {
 }
 
 if ($bEnableDebugInfo) {
-    echo "first zero count:$iFirstZeroCount\n";
+    // echo "first zero count:$iFirstZeroCount\n";
 }
 
 if (0 == $iTradeAssetsCount) {
@@ -128,7 +146,6 @@ $latestYear = RemoveStrMark($infoArr[$iFormTypeCount - 1], "\"", "#");
 if ($bEnableDebugInfo) {
     echo "latestYear:$latestYear, yearCount:$yearCount\n";
 }
-// return;
 
 $iCount = 0;
 //货币资金及金融资产
@@ -449,8 +466,8 @@ if ($difInventory1 > $difTotalTaking1 && $difInventory2 > $difTotalTaking2){
 
 if ($bEnableDebugInfo) {
     echo "AverageEbitIncrease:".$AverageEbitIncrease." ebitAdjustedYear:".$ebitAdjustedYear."\n";
-    echo "first zero count:$iFirstZeroCount\n";
-    echo "first financial cost:".$financialCostArr[0]."\n";
+    // echo "first zero count:$iFirstZeroCount\n";
+    // echo "first financial cost:".$financialCostArr[0]."\n";
 }
 
 //现金流量表
@@ -688,10 +705,10 @@ if ($averageQuickRatio < 0.9){
 }
 
 if ($bEnableDebugInfo) {
-    echo "first assetsLiaRat".$assetsLiabilitiesRatioArr[0]." first flow rat:".$flowRatioArr[0]." first quick rat:".$quickRatioArr[0]."\n";
+    // echo "first assetsLiaRat".$assetsLiabilitiesRatioArr[0]." first flow rat:".$flowRatioArr[0]." first quick rat:".$quickRatioArr[0]."\n";
     echo "maxRoicWave:".$maxRoicWave." bearBaseValue:".$bearBaseValue." bearAdjustedYear:".$bearAdjustedYear."\n";
     echo "averageAssetsLiaRotio:".$averageAssetsLiabilitiesRatio." averageFlowRatio:".$averageFlowRatio." averageQuickRatio:".$averageQuickRatio."\n";
-    echo "safeBoundAdjusted".$safeBoundAdjusted." first ROIC:".$roicArr[0]." first capitalCost:".$capitalCostArr[0]."\n";
+    echo "safeBoundAdjusted".$safeBoundAdjusted."\n";
 }
 
 $expectPaybackYear = 10;
@@ -714,9 +731,25 @@ $precisionAssessment7Value = round($precisionAssessment7TotalValue / $totalValue
 if ($bEnableDebugInfo) {
     echo "precisionAssessment10TotalValue:".$precisionAssessment10TotalValue." totalRoic:".$totalRoic." averageRoic:".$averageRoic."\n";
     echo "b1($bearTheory1Flag)b2($bearTheory2Flag)b3($bearTheory3Flag)b4($bearTheory4Flag)\n";
+    echo "precisionAssessment10Value:$precisionAssessment10Value (10)years\n";
+    echo "precisionAssessment7Value:$precisionAssessment7Value (7)years\n";
 }
 
-echo "precisionAssessment10Value:$precisionAssessment10Value (10)years\n";
-echo "precisionAssessment7Value:$precisionAssessment7Value (7)years\n";
 
 curl_close($ch);
+
+$jsonArr = array(
+    "id"=>$queryID,
+    "name"=>$name,
+    "year"=>$latestYear,
+    "roicLv"=>$averageRoic,
+    "year10Value"=>$precisionAssessment10Value,
+    "year7Value"=>$precisionAssessment7Value,
+    "b1"=>$bearTheory1Flag,
+    "b2"=>$bearTheory2Flag,
+    "b3"=>$bearTheory3Flag,
+    "b4"=>$bearTheory4Flag
+);
+
+$json = json_encode($jsonArr);
+echo $json;
