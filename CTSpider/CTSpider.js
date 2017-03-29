@@ -1,7 +1,7 @@
-var startId = 2000;
-var stopId = 2999;
+var startId = 300000;
+var stopId = 300999;
 var step = 10;
-var averageCostTime = 800;
+var averageCostTime = 650;
 var timerHandle;
 
 $(document).ready(function () {
