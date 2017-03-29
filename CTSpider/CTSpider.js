@@ -1,5 +1,5 @@
-var startId = 300000;
-var stopId = 300999;
+var startId = 0;
+var stopId = 999;
 var step = 10;
 var averageCostTime = 650;
 var timerHandle;
@@ -22,13 +22,12 @@ function Evaluate() {
 
     $.post("./CTSpider.php",
         {
-            // ids:[600090]
+            // ids:[2493]
             ids:idArr
         },
         function (data, textStatus, jqXHR) {
             // alert(data);
             try {
-                
                 var json = JSON.parse(data);
                 if (null !== json) {
                     if ( 1 === json.status ){
