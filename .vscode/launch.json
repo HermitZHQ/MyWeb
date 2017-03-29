@@ -7,7 +7,7 @@
             "sourceMaps": true,
             "name": "Launch CTSpider",
             "url": "http://127.0.0.1:63342/ctspider/ctspider.html",
-            "webRoot": "${workspaceRoot}/ctspider"
+            "webRoot": "${workspaceRoot}/CTSpider"
         },
         {
             "type": "chrome",
