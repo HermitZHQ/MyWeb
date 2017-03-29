@@ -59,9 +59,9 @@
     right: 10px;
     top: 20px;
     width: 200px;
-    height: auto;
+    height: 30%;
     text-align: center;
-    overflow: auto;
+    overflow: scroll;
 }
 
 /*.tipArea ul{

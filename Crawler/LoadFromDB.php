@@ -10,7 +10,7 @@ $mysqli = new mysqli();
 //connect to mysql
 $mysqli->connect('127.0.0.1', $sqlUser, $sqlPw, $dbName);
 
-$query = "select * from $tableName";
+$query = "select * from $tableName where tvalue > value";
 $res = $mysqli->query($query);
 $affectedNum = $mysqli->affected_rows;
 

@@ -1,5 +1,5 @@
-var startId = 601169;
-var stopId = 601999;
+var startId = 2000;
+var stopId = 2999;
 var step = 10;
 var averageCostTime = 800;
 var timerHandle;

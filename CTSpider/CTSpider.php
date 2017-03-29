@@ -58,7 +58,7 @@ function Evaluate($queryID)
     $infoArr = explode(",", $response);
 
     if (count($infoArr) < 2) {
-        if ($bEnableDebugInfo){
+        if ($bEnableDebugInfo) {
             echo "id invalid";
         }
         return;
@@ -124,7 +124,7 @@ function Evaluate($queryID)
     }
 
     if (0 == $iTradeAssetsCount) {
-        if ($bEnableDebugInfo){
+        if ($bEnableDebugInfo) {
             echo "couldn't find trade assets, type error, maybe it's a bank stock...";
         }
         return;
@@ -132,7 +132,7 @@ function Evaluate($queryID)
 
     $yearCount = $iFormTypeCount - $iFormDateCount - 1;
     if ($yearCount < 3) {
-        if ($bEnableDebugInfo){
+        if ($bEnableDebugInfo) {
             echo "year count(".$yearCount.") too short...";
         }
         return;
@@ -141,7 +141,7 @@ function Evaluate($queryID)
     $startDataIndex = count($dataArr) - count($infoArr) - 5;
     $checkYearCount = $dataArr[$startDataIndex - 1] - 1;
     if ($checkYearCount != $yearCount) {
-        if ($bEnableDebugInfo){
+        if ($bEnableDebugInfo) {
             echo "verify year count failed, dataArr-yearCount:$checkYearCount, yearCount:$yearCount";
         }
         return;
@@ -749,7 +749,7 @@ function Evaluate($queryID)
     );
 
     $json = json_encode($jsonArr);
-    if ($bEnableDebugInfo){
+    if ($bEnableDebugInfo) {
         echo $json;
     }
 
@@ -812,10 +812,11 @@ $realCount = 0;
 // echo json_encode($jsArr);
 
 $time = microtime(true);
-for ($i=0; $i < $size; $i++) { 
-   if ( Evaluate($idArr[$i]) ){
-       ++$realCount;
-   }
+for ($i=0; $i < $size; $i++) {
+    $tmpId = sprintf("%06d", $idArr[$i]);
+    if (Evaluate($tmpId)) {
+        ++$realCount;
+    }
     //    echo "$i ";
 }
 // echo $realCount;
