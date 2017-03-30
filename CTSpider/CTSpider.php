@@ -2,6 +2,7 @@
 error_reporting(0);
 header("Access-Control-Allow-Origin:*");
 
+$yuanFlag = false;//check元
 $idArr = $_POST["ids"];
 $size = count($idArr);
 $realCount = 0;
@@ -12,6 +13,17 @@ function RemoveStrMark(&$str, $leftC = "\"", $rightC = "\"")
     $pos1 = strpos($str, $leftC);
     $str = substr($str, $pos1 + 1, strrpos($str, $rightC) - $pos1 - 1);
     return $str;
+}
+
+function CheckYuanExist(&$str)
+{
+    if (false != strstr($str, "元")) {
+        $GLOBALS['yuanFlag'] = true;
+        return true;
+    } else {
+        $GLOBALS['yuanFlag'] = false;
+        return false;
+    }
 }
 
 function Evaluate($queryID)
@@ -159,6 +171,7 @@ function Evaluate($queryID)
         echo "latestYear:$latestYear, yearCount:$yearCount\n";
     }
 
+    $million = 1000000.0;
     $iCount = 0;
     //货币资金及金融资产
     $cash1 = 0;
@@ -235,7 +248,11 @@ function Evaluate($queryID)
             //由于数据是逆向排列的，所以这里是减回去，这里是取最后一年的数据
             $dataIndex = $startDataIndex - ($yearCount+2) - (2+$yearCount+1)*($Cash1Row-1);
             $tmp = $infoArr[$dataArr[$dataIndex] - 1];
+            CheckYuanExist($tmp);
             $cash1 = floatval(RemoveStrMark($tmp));
+            if ($GLOBALS['yuanFlag']) {
+                $cash1 = $cash1/$million;
+            }
         }
 
         if (!$receivableTitleFlag && $var == "\"应收账款\"") {
@@ -243,7 +260,11 @@ function Evaluate($queryID)
             for ($i=0; $i < $yearCount; $i++) {
                 $dataIndex = $startDataIndex - (2+$yearCount+1)*($receivableRow-1) - 3 - $i;
                 $tmp = $infoArr[$dataArr[$dataIndex] - 1];
+                CheckYuanExist($tmp);
                 $receivableArr[] = floatval(RemoveStrMark($tmp));
+                if ($GLOBALS['yuanFlag']) {
+                    $receivableArr[$i] = $receivableArr[$i]/$million;
+                }
             }
         }
 
@@ -252,7 +273,11 @@ function Evaluate($queryID)
             for ($i=0; $i < $yearCount; $i++) {
                 $dataIndex = $startDataIndex - (2+$yearCount+1)*($inventoryRow-1) - 3 - $i;
                 $tmp = $infoArr[$dataArr[$dataIndex] - 1];
+                CheckYuanExist($tmp);
                 $inventoryArr[] = floatval(RemoveStrMark($tmp));
+                if ($GLOBALS['yuanFlag']) {
+                    $inventoryArr[$i] = $inventoryArr[$i]/$million;
+                }
             }
         }
 
@@ -262,7 +287,11 @@ function Evaluate($queryID)
 
             $dataIndex = $startDataIndex - ($yearCount+2) - (2+$yearCount+1)*($Cash2Row-1);
             $tmp = $infoArr[$dataArr[$dataIndex] - 1];
+            CheckYuanExist($tmp);
             $cash2 = floatval(RemoveStrMark($tmp));
+            if ($GLOBALS['yuanFlag']) {
+                $cash2 = $cash2/$million;
+            }
         }
 
         if (!$bCurrentAssetsNextTitleFlag && $var == "\"可供出售金融资产\"") {
@@ -271,7 +300,11 @@ function Evaluate($queryID)
 
             $dataIndex = $startDataIndex - ($yearCount+2) - (2+$yearCount+1)*($currentAssetsRow-1);
             $tmp = $infoArr[$dataArr[$dataIndex] - 1];
+            CheckYuanExist($tmp);
             $currentAssets = floatval(RemoveStrMark($tmp));
+            if ($GLOBALS['yuanFlag']) {
+                $currentAssets = $currentAssets/$million;
+            }
         }
 
         if (!$bFixedAssets1NextTitleFlag && $var == "\"固定资产\"") {
@@ -280,7 +313,11 @@ function Evaluate($queryID)
 
             $dataIndex = $startDataIndex - ($yearCount+2) - (2+$yearCount+1)*($fixedAssets1Row-1);
             $tmp = $infoArr[$dataArr[$dataIndex] - 1];
+            CheckYuanExist($tmp);
             $fixedAssets1 = floatval(RemoveStrMark($tmp));
+            if ($GLOBALS['yuanFlag']) {
+                $fixedAssets1 = $fixedAssets1/$million;
+            }
         }
 
         if (!$bFixedAssets2NextTitleFlag && $var == "\"在建工程\"") {
@@ -289,7 +326,11 @@ function Evaluate($queryID)
 
             $dataIndex = $startDataIndex - ($yearCount+2) - (2+$yearCount+1)*($fixedAssets2Row-1);
             $tmp = $infoArr[$dataArr[$dataIndex] - 1];
+            CheckYuanExist($tmp);
             $fixedAssets2 = floatval(RemoveStrMark($tmp));
+            if ($GLOBALS['yuanFlag']) {
+                $fixedAssets2 = $fixedAssets2/$million;
+            }
         }
 
         if (!$bFixedAssets3NextTitleFlag && $var == "\"工程物资\"") {
@@ -298,7 +339,11 @@ function Evaluate($queryID)
 
             $dataIndex = $startDataIndex - ($yearCount+2) - (2+$yearCount+1)*($fixedAssets3Row-1);
             $tmp = $infoArr[$dataArr[$dataIndex] - 1];
+            CheckYuanExist($tmp);
             $fixedAssets3 = floatval(RemoveStrMark($tmp));
+            if ($GLOBALS['yuanFlag']) {
+                $fixedAssets3 = $fixedAssets3/$million;
+            }
         }
 
         if (!$bShortLoanNextTitleFlag && $var == "\"交易性金融负债\"") {
@@ -307,7 +352,11 @@ function Evaluate($queryID)
 
             $dataIndex = $startDataIndex - ($yearCount+2) - (2+$yearCount+1)*($shortLoanRow-1);
             $tmp = $infoArr[$dataArr[$dataIndex] - 1];
+            CheckYuanExist($tmp);
             $shortLoan = floatval(RemoveStrMark($tmp));
+            if ($GLOBALS['yuanFlag']) {
+                $shortLoan = $shortLoan/$million;
+            }
         }
 
         if (!$bLongLoanNextTitleFlag && $var == "\"应付债券\"") {
@@ -316,7 +365,11 @@ function Evaluate($queryID)
 
             $dataIndex = $startDataIndex - ($yearCount+2) - (2+$yearCount+1)*($longLoanRow-1);
             $tmp = $infoArr[$dataArr[$dataIndex] - 1];
+            CheckYuanExist($tmp);
             $longLoan = floatval(RemoveStrMark($tmp));
+            if ($GLOBALS['yuanFlag']) {
+                $longLoan = $longLoan/$million;
+            }
         }
 
         if (!$bbondsPayableNextTitleFlag && $var == "\"长期应付款\"") {
@@ -325,7 +378,11 @@ function Evaluate($queryID)
 
             $dataIndex = $startDataIndex - ($yearCount+2) - (2+$yearCount+1)*($bondsPayableRow-1);
             $tmp = $infoArr[$dataArr[$dataIndex] - 1];
+            CheckYuanExist($tmp);
             $bondsPayable = floatval(RemoveStrMark($tmp));
+            if ($GLOBALS['yuanFlag']) {
+                $bondsPayable = $bondsPayable/$million;
+            }
         }
 
         if ($bbondsPayableNextTitleFlag) {
@@ -392,8 +449,11 @@ function Evaluate($queryID)
             for ($i=0; $i < $yearCount; $i++) {
                 $dataIndex = $startDataIndex - (2+$yearCount+1)*($totalTakingRow-1) - 3 - $i;
                 $tmp = $infoArr[$dataArr[$dataIndex]-1];
-                $tmp = floatval(RemoveStrMark($tmp));
-                $totalTakingArr[] = $tmp;
+                CheckYuanExist($tmp);
+                $totalTakingArr[] = floatval(RemoveStrMark($tmp));
+                if ($GLOBALS['yuanFlag']) {
+                    $totalTakingArr[$i] = $totalTakingArr[$i]/$million;
+                }
             }
         }
 
@@ -402,8 +462,11 @@ function Evaluate($queryID)
             for ($i=0; $i < $yearCount; $i++) {
                 $dataIndex = $startDataIndex - (2+$yearCount+1)*($financialCostRow-1) - 3 - $i;
                 $tmp = $infoArr[$dataArr[$dataIndex]-1];
-                $tmp = floatval(RemoveStrMark($tmp));
-                $financialCostArr[] = $tmp;
+                CheckYuanExist($tmp);
+                $financialCostArr[] = floatval(RemoveStrMark($tmp));
+                if ($GLOBALS['yuanFlag']) {
+                    $financialCostArr[$i] = $financialCostArr[$i]/$million;
+                }
             }
         }
 
@@ -412,8 +475,11 @@ function Evaluate($queryID)
             for ($i=0; $i < $yearCount; $i++) {
                 $dataIndex = $startDataIndex - (2+$yearCount+1)*($totalProfitRow-1) - 3 - $i;
                 $tmp = $infoArr[$dataArr[$dataIndex]-1];
-                $tmp = floatval(RemoveStrMark($tmp));
-                $totalProfitArr[] = $tmp;
+                CheckYuanExist($tmp);
+                $totalProfitArr[] = floatval(RemoveStrMark($tmp));
+                if ($GLOBALS['yuanFlag']) {
+                    $totalProfitArr[$i] = $totalProfitArr[$i]/$million;
+                }
             }
         }
 
@@ -422,8 +488,11 @@ function Evaluate($queryID)
             for ($i=0; $i < $yearCount; $i++) {
                 $dataIndex = $startDataIndex - (2+$yearCount+1)*($retainedProfitRow-1) - 3 - $i;
                 $tmp = $infoArr[$dataArr[$dataIndex]-1];
-                $tmp = floatval(RemoveStrMark($tmp));
-                $retainedProfitArr[] = $tmp;
+                CheckYuanExist($tmp);
+                $retainedProfitArr[] = floatval(RemoveStrMark($tmp));
+                if ($GLOBALS['yuanFlag']) {
+                    $retainedProfitArr[$i] = $retainedProfitArr[$i]/$million;
+                }
             }
         }
 
@@ -509,7 +578,11 @@ function Evaluate($queryID)
             for ($i=0; $i < $yearCount; $i++) {
                 $dataIndex = $startDataIndex - (2+$yearCount+1)*($operationCashFlowRow-1) - 3 - $i;
                 $tmp = $infoArr[$dataArr[$dataIndex]-1];
+                CheckYuanExist($tmp);
                 $operationCashFlowArr[] = floatval(RemoveStrMark($tmp));
+                if ($GLOBALS['yuanFlag']) {
+                    $operationCashFlowArr[$i] = $operationCashFlowArr[$i]/$million;
+                }
             }
         }
     }
@@ -563,7 +636,11 @@ function Evaluate($queryID)
             for ($i=0; $i < $yearCount; $i++) {
                 $dataIndex = $startDataIndex - (2+$yearCount+1)*($roicRow-1) - 3 - $i;
                 $tmp = $infoArr[$dataArr[$dataIndex]-1];
+                // CheckYuanExist($tmp);
                 $roicArr[] = floatval(RemoveStrMark($tmp));
+                // if ($GLOBALS['yuanFlag']) {
+                //     $roicArr[$i] = $roicArr[$i]/$million;
+                // }
             }
         }
 
@@ -572,7 +649,11 @@ function Evaluate($queryID)
             for ($i=0; $i < $yearCount; $i++) {
                 $dataIndex = $startDataIndex - (2+$yearCount+1)*($capitalCostRow-1) - 3 - $i;
                 $tmp = $infoArr[$dataArr[$dataIndex]-1];
+                CheckYuanExist($tmp);
                 $capitalCostArr[] = floatval(RemoveStrMark($tmp));
+                if ($GLOBALS['yuanFlag']) {
+                    $capitalCostArr[$i] = $capitalCostArr[$i]/$million;
+                }
             }
         }
 
@@ -581,7 +662,11 @@ function Evaluate($queryID)
             for ($i=0; $i < $yearCount; $i++) {
                 $dataIndex = $startDataIndex - (2+$yearCount+1)*($retainedCashFlowRow-1) - 3 - $i;
                 $tmp = $infoArr[$dataArr[$dataIndex]-1];
+                CheckYuanExist($tmp);
                 $retainedCashFlowArr[] = floatval(RemoveStrMark($tmp));
+                if ($GLOBALS['yuanFlag']) {
+                    $retainedCashFlowArr[$i] = $retainedCashFlowArr[$i]/$million;
+                }
             }
         }
 
@@ -590,7 +675,11 @@ function Evaluate($queryID)
             for ($i=0; $i < $yearCount; $i++) {
                 $dataIndex = $startDataIndex - (2+$yearCount+1)*($assetsLiabilitiesRatioRow-1) - 3 - $i;
                 $tmp = $infoArr[$dataArr[$dataIndex]-1];
+                // CheckYuanExist($tmp);
                 $assetsLiabilitiesRatioArr[] = floatval(RemoveStrMark($tmp));
+                // if ($GLOBALS['yuanFlag']) {
+                //     $assetsLiabilitiesRatioArr[$i] = $assetsLiabilitiesRatioArr[$i]/$million;
+                // }
             }
         }
 
@@ -599,7 +688,11 @@ function Evaluate($queryID)
             for ($i=0; $i < $yearCount; $i++) {
                 $dataIndex = $startDataIndex - (2+$yearCount+1)*($flowRatioRow-1) - 3 - $i;
                 $tmp = $infoArr[$dataArr[$dataIndex]-1];
+                // CheckYuanExist($tmp);
                 $flowRatioArr[] = floatval(RemoveStrMark($tmp));
+                // if ($GLOBALS['yuanFlag']) {
+                //     $flowRatioArr[$i] = $flowRatioArr[$i]/$million;
+                // }
             }
         }
 
@@ -608,7 +701,11 @@ function Evaluate($queryID)
             for ($i=0; $i < $yearCount; $i++) {
                 $dataIndex = $startDataIndex - (2+$yearCount+1)*($quickRatioRow-1) - 3 - $i;
                 $tmp = $infoArr[$dataArr[$dataIndex]-1];
+                // CheckYuanExist($tmp);
                 $quickRatioArr[] = floatval(RemoveStrMark($tmp));
+                // if ($GLOBALS['yuanFlag']) {
+                //     $quickRatioArr[$i] = $quickRatioArr[$i]/$million;
+                // }
             }
         }
 
@@ -782,7 +879,8 @@ function Evaluate($queryID)
     $sqlUser = "root";
     $sqlPw = "zhq000136";
     $dbName = "stock_assistant";
-    $tableName = "stock_info";
+    $year = 2015;
+    $tableName = "stock_info_".$year;
     //create mysqli object
     $mysqli = new mysqli();
     //connect to mysql

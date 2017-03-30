@@ -4,13 +4,14 @@ error_reporting(0);
 $sqlUser = "root";
 $sqlPw = "zhq000136";
 $dbName = "stock_assistant";
-$tableName = "stock_info";
+$year = 2015;
+$tableName = "stock_info_".$year;
 //create mysqli object
 $mysqli = new mysqli();
 //connect to mysql
 $mysqli->connect('127.0.0.1', $sqlUser, $sqlPw, $dbName);
 
-$query = "select * from $tableName where tvalue > value";
+$query = "select * from $tableName where (tvalue > value) and ((tvalue-value)/value<1)";
 $res = $mysqli->query($query);
 $affectedNum = $mysqli->affected_rows;
 

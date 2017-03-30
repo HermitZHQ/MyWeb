@@ -15,7 +15,8 @@ $infoCount = count($infoArr);
 $sqlUser = "root";
 $sqlPw = "zhq000136";
 $dbName = "stock_assistant";
-$tableName = "stock_info";
+$year = 2015;
+$tableName = "stock_info_".$year;
 //create mysqli object
 $mysqli = new mysqli();
 //connect to mysql

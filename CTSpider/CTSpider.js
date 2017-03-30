@@ -1,8 +1,20 @@
-var startId = 0;
-var stopId = 999;
 var step = 10;
 var averageCostTime = 650;
 var timerHandle;
+
+var idJsonInfo = {
+    num:6,
+    index:0,
+    arr:
+    [
+        {startId:0, stopId:999, bFinish:false},
+        {startId:2000, stopId:2999, bFinish:false},
+        {startId:300000, stopId:300999, bFinish:false},
+        {startId:600000, stopId:600999, bFinish:false},
+        {startId:601000, stopId:601999, bFinish:false},
+        {startId:603000, stopId:603999, bFinish:false},
+    ]
+};
 
 $(document).ready(function () {
     $("#evaluate").click(function () {
@@ -15,14 +27,14 @@ $(document).ready(function () {
 function Evaluate() {
     var idArr = [];
     for (var i = 0; i < step; i++) {
-        idArr.push(startId + i);
+        idArr.push(idJsonInfo.arr[idJsonInfo.index].startId + i);
     }
 
     $("#tip").html("processing...");
 
     $.post("./CTSpider.php",
         {
-            // ids:[2493]
+            // ids:[26]
             ids:idArr
         },
         function (data, textStatus, jqXHR) {
@@ -32,15 +44,20 @@ function Evaluate() {
                 if (null !== json) {
                     if ( 1 === json.status ){
                         // alert("total cost time:"+(json.totalTime).toFixed(2)+" average time:"+(json.averageTime).toFixed(2)+" handleNum:"+json.handleNum);
-                        $("#tip").html("succeed handle to id:"+(startId+step-1)+"\ntotal cost time:"+(json.totalTime).toFixed(2)+" average time:"+(json.averageTime).toFixed(2)+" handleNum:"+json.handleNum);
-                        $("#id").val(startId+step-1);
+                        $("#tip").html("succeed handle to id:"+(idJsonInfo.arr[idJsonInfo.index].startId+step-1)+"\ntotal cost time:"+(json.totalTime).toFixed(2)+" average time:"+(json.averageTime).toFixed(2)+" handleNum:"+json.handleNum);
+                        $("#id").val(idJsonInfo.arr[idJsonInfo.index].startId+step-1);
                         $("#time").val((json.totalTime).toFixed(2));
                         $("#num").val(json.handleNum);
                         $("#averageTime").val((json.averageTime).toFixed(2));
-                        startId = startId+step;
-                        if (startId > stopId){
-                            $("#tip").html("Handle completed");
-                            clearInterval(timerHandle);
+                        idJsonInfo.arr[idJsonInfo.index].startId = idJsonInfo.arr[idJsonInfo.index].startId+step;
+                        if (idJsonInfo.arr[idJsonInfo.index].startId > idJsonInfo.arr[idJsonInfo.index].stopId){
+                            // $("#tip").html("Handle completed");
+                            idJsonInfo.arr[idJsonInfo.index].bFinish = true;
+                            idJsonInfo.index++;
+                            if (idJsonInfo.index >= idJsonInfo.num){
+                                clearInterval(timerHandle);
+                                alert("Handle completed");
+                            }
                         }
                     }
                 }
