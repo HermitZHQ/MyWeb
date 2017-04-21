@@ -32,12 +32,11 @@ var mod1 = new THREE.Object3D();
 
 $(document).ready(function () {
 
-    ParseParam();
+    // ParseParam();
 
-    init();
-    animate();
+    // setTimeout(Init3Js, 3000);
 
-    SliderFunc();
+    Init3Js();
 
     $("button#toReg").click(function () {
         self.location.href = "register.html";
@@ -46,7 +45,13 @@ $(document).ready(function () {
     $("button#toTop").click(function () {
         self.location.href = "#loginArea";
     });
-})
+});
+
+function Init3Js(){
+    init();
+    animate();
+    SliderFunc();
+}
 
 function SliderFunc() {
     $("#slider").clientWidth = contentArea.clientWidth;
@@ -98,8 +103,8 @@ function init() {
     });
 
     // model
-    var loader = new THREE.OBJLoader(manager);
-    loader.load('resource/obj/head/001.obj', function (object) {
+    loader = new THREE.OBJLoader(manager);
+    loader.load('resource/obj/head/head.obj', function (object) {
         object.traverse(function (child) {
             if (child instanceof THREE.Mesh) {
                 // child.material.map = texture;
@@ -153,15 +158,15 @@ function animate() {
 
 function render() {
     mod1.rotateY(0.01);
-    camera.position.x += (mouseX - camera.position.x) * .05;
-    camera.position.y += (- mouseY - camera.position.y) * .05;
+    camera.position.x += (mouseX - camera.position.x) * 0.05;
+    camera.position.y += (- mouseY - camera.position.y) * 0.05;
     camera.lookAt(scene.position);
     renderer.render(scene, camera);
 }
 
 function ParseParam() {
     var strParams = location.href.split("?")[1];
-    if (null == strParams)
+    if (null === strParams)
         return;
 
     var vArr = strParams.split(",");
@@ -173,3 +178,9 @@ function ParseParam() {
         }
     }
 }
+
+//wait for the start 'CalculatePi' message
+//e is the event and e.data contains the JSON object
+self.onmessage = function(e) {
+  Init3Js();
+};
